@@ -1,1 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sala 1</title>
 
+<style>
+body{
+  font-family: Arial;
+  background:#1b0033;
+  color:white;
+  text-align:center;
+}
+
+.instrumentos{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-top:40px;
+}
+
+.instrumento{
+  border:3px solid transparent;
+  border-radius:15px;
+  padding:10px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.instrumento img{
+  width:120px;
+  border-radius:10px;
+}
+
+.instrumento.seleccionado{
+  border-color:#00ff88;
+  background:rgba(0,255,136,0.2);
+}
+</style>
+
+</head>
+<body>
+
+<h1>Sala 1</h1>
+<a href="../" style="color:#00ffcc;">← Volver</a>
+
+<div class="instrumentos">
+
+  <div class="instrumento gaita" onclick="toggleInstrument(this)">
+    <img src="../escenario.png">
+    <p>Gaita 1</p>
+  </div>
+
+  <div class="instrumento gaita" onclick="toggleInstrument(this)">
+    <img src="../escenario.png">
+    <p>Gaita 2</p>
+  </div>
+
+  <div class="instrumento tambor" onclick="toggleInstrument(this)">
+    <img src="../escenario.png">
+    <p>Tambor</p>
+  </div>
+
+</div>
+
+<script>
+function toggleInstrument(element){
+
+  const tipo = element.classList.contains("gaita") ? "gaita" : "tambor";
+
+  const gaitasSeleccionadas = document.querySelectorAll(".gaita.seleccionado").length;
+  const tamborSeleccionado = document.querySelectorAll(".tambor.seleccionado").length;
+
+  if(element.classList.contains("seleccionado")){
+    element.classList.remove("seleccionado");
+    return;
+  }
+
+  if(tipo === "gaita" && gaitasSeleccionadas >= 2){
+    alert("Solo puedes seleccionar máximo 2 gaitas");
+    return;
+  }
+
+  if(tipo === "tambor" && tamborSeleccionado >= 1){
+    alert("Solo puedes seleccionar 1 tambor");
+    return;
+  }
+
+  element.classList.add("seleccionado");
+}
+</script>
+
+</body>
+</html>

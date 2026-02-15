@@ -38,9 +38,7 @@
       display:inline-flex; align-items:center; gap:10px;
     }
     .back:hover{background:rgba(255,255,255,.07)}
-    .h{
-      display:flex; flex-direction:column; gap:4px;
-    }
+    .h{display:flex; flex-direction:column; gap:4px}
     .h h1{margin:0; font-size:22px; letter-spacing:.2px}
     .h p{margin:0; color:var(--muted); font-size:13px}
     .grid{
@@ -137,14 +135,18 @@
     }
     .status.ok{color:var(--ok); border-color:rgba(54,211,153,.35)}
     .status.bad{color:var(--bad); border-color:rgba(255,107,107,.35)}
-    .small-actions{
-      display:flex; gap:10px; margin-top:10px;
-    }
+    .small-actions{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
     .ghost{
       cursor:pointer;
       background:rgba(255,255,255,.06);
       border:1px solid var(--border);
       font-weight:600;
+      padding:10px 12px;
+      border-radius:14px;
+      color:var(--text);
+      width:auto;
+      flex:1;
+      min-width:190px;
     }
     .ghost:hover{background:rgba(255,255,255,.09)}
     .danger{
@@ -157,11 +159,9 @@
 <body>
   <div class="wrap">
     <div class="topbar">
-      <a class="back" href="./index.html" aria-label="Volver">
-        ← <span>Volver</span>
-      </a>
+      <a class="back" href="./index.html" aria-label="Volver">← <span>Volver</span></a>
       <div class="h">
-        <h1 id="title">Reservas · Sala 1</h1>
+        <h1 id="title">Reservas · Sala 3</h1>
         <p>Selecciona día y horas (máx. 2h). Se guarda en este dispositivo.</p>
       </div>
       <div style="width:94px"></div>
@@ -204,7 +204,7 @@
 
           <div style="height:12px"></div>
 
-          <button class="btn" id="bookBtn">Reservar</button>
+          <button class="btn" id="bookBtn" type="button">Reservar</button>
           <div id="msg" class="msg" style="display:none"></div>
 
           <div class="small-actions">
@@ -227,26 +227,33 @@
 
 <script>
   // ====== CONFIG ======
-  const SALA_ID = "Sala 3";               // <- CAMBIA ESTO EN sala2.html, sala3.html...
-  const STORE_KEY = "reservas_salas_v1";  // (no lo cambies)
+  const SALA_ID = "Sala 3";               // ✅ SALA 3
+  const STORE_KEY = "reservas_salas_v1";
   const START_MIN = 9 * 60;              // 09:00
   const END_MIN   = 22 * 60;             // 22:00
   const STEP = 30;                       // 30 min
-  const MAX_DURATION = 120;              // 2 horas (120 min)
+  const MAX_DURATION = 120;              // 2 horas
 
   // ====== HELPERS ======
   const pad = n => String(n).padStart(2, "0");
   const toTime = mins => `${pad(Math.floor(mins/60))}:${pad(mins%60)}`;
   const parseTime = str => {
-    const [h,m] = str.split(":").map(Number);
+    const parts = String(str).split(":");
+    const h = Number(parts[0] || 0);
+    const m = Number(parts[1] || 0);
     return h*60 + m;
   };
   const fmtDateES = (yyyy_mm_dd) => {
-    const [y,m,d] = yyyy_mm_dd.split("-").map(Number);
-    const dt = new Date(y, m-1, d);
+    const parts = String(yyyy_mm_dd).split("-").map(Number);
+    const y = parts[0], m = parts[1], d = parts[2];
+    const dt = new Date(y, (m||1)-1, d||1);
     return dt.toLocaleDateString("es-ES", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
   };
   const overlaps = (aStart, aEnd, bStart, bEnd) => (aStart < bEnd) && (aEnd > bStart);
+
+  function makeId(){
+    return "r_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+  }
 
   const loadAll = () => {
     try { return JSON.parse(localStorage.getItem(STORE_KEY) || "[]"); }
@@ -260,7 +267,7 @@
       .sort((x,y) => x.start - y.start);
   };
 
-  // ====== UI REFERENCES ======
+  // ====== UI ======
   const titleEl = document.getElementById("title");
   const dateEl = document.getElementById("date");
   const nameEl = document.getElementById("name");
@@ -273,36 +280,39 @@
   const clearDayBtn = document.getElementById("clearDayBtn");
   const clearAllBtn = document.getElementById("clearAllBtn");
 
-  titleEl.textContent = `Reservas · ${SALA_ID}`;
+  if (titleEl) titleEl.textContent = `Reservas · ${SALA_ID}`;
   document.title = `Reservas - ${SALA_ID}`;
 
-  // ====== INIT DATE (HOY) ======
-  const today = new Date();
-  const y = today.getFullYear();
-  const m = pad(today.getMonth()+1);
-  const d = pad(today.getDate());
-  dateEl.value = `${y}-${m}-${d}`;
-  dateEl.min = `${y}-01-01`; // opcional
-  dayLabelEl.textContent = fmtDateES(dateEl.value);
+  // ====== INIT DATE ======
+  (function initDate(){
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = pad(today.getMonth()+1);
+    const d = pad(today.getDate());
+    if (dateEl) dateEl.value = `${y}-${m}-${d}`;
+    if (dateEl) dateEl.min = `${y}-01-01`;
+    if (dayLabelEl && dateEl) dayLabelEl.textContent = fmtDateES(dateEl.value);
+  })();
 
-  // ====== POPULATE START TIMES ======
+  // ====== TIMES ======
   function fillStartTimes(){
+    if(!startEl) return;
     startEl.innerHTML = "";
     for(let t=START_MIN; t<=END_MIN-STEP; t+=STEP){
-      // permitimos empezar hasta 21:30 (para terminar 22:00 mínimo)
       const opt = document.createElement("option");
       opt.value = toTime(t);
       opt.textContent = toTime(t);
       startEl.appendChild(opt);
     }
-    // por defecto 19:00 si existe, si no la primera
-    const prefer = "19:00";
-    startEl.value = [...startEl.options].some(o=>o.value===prefer) ? prefer : startEl.options[0].value;
+    startEl.value = startEl.options[0]?.value || "";
   }
 
   function fillEndTimes(){
+    if(!endEl || !startEl) return;
     endEl.innerHTML = "";
-    const s = parseTime(startEl.value);
+    const sVal = startEl.value || toTime(START_MIN);
+    const s = parseTime(sVal);
+
     const maxEnd = Math.min(s + MAX_DURATION, END_MIN);
     for(let t = s + STEP; t <= maxEnd; t += STEP){
       const opt = document.createElement("option");
@@ -310,6 +320,118 @@
       opt.textContent = toTime(t);
       endEl.appendChild(opt);
     }
-    // por defecto 1h si se puede
+
     const oneHour = toTime(Math.min(s + 60, maxEnd));
-    endEl.value = [...endEl.options].
+    const exists = [...endEl.options].some(o => o.value === oneHour);
+    endEl.value = exists ? oneHour : (endEl.options[endEl.options.length-1]?.value || "");
+  }
+
+  // ====== RENDER ======
+  function renderAvailability(){
+    if(!availabilityEl || !dateEl || !dayLabelEl) return;
+    const date = dateEl.value;
+    dayLabelEl.textContent = fmtDateES(date);
+
+    const reservas = getReservationsFor(SALA_ID, date);
+    availabilityEl.innerHTML = "";
+
+    for(let t=START_MIN; t<END_MIN; t+=STEP){
+      const slotStart = t;
+      const slotEnd = t + STEP;
+      const r = reservas.find(r => overlaps(slotStart, slotEnd, r.start, r.end));
+
+      const box = document.createElement("div");
+      box.className = "schedule";
+
+      const tEl = document.createElement("div");
+      tEl.className = "t";
+      tEl.textContent = `${toTime(slotStart)}–${toTime(slotEnd)}`;
+
+      const whoEl = document.createElement("div");
+      whoEl.className = "who";
+      whoEl.textContent = r ? `Reservado por: ${r.name} (${toTime(r.start)}–${toTime(r.end)})` : "Libre";
+
+      const st = document.createElement("div");
+      st.className = "status " + (r ? "bad" : "ok");
+      st.textContent = r ? "OCUPADO" : "LIBRE";
+
+      box.appendChild(tEl);
+      box.appendChild(whoEl);
+      box.appendChild(st);
+      availabilityEl.appendChild(box);
+    }
+  }
+
+  // ====== MSG ======
+  function showMsg(text, type){
+    if(!msgEl) return alert(text);
+    msgEl.style.display = "block";
+    msgEl.className = "msg " + (type || "");
+    msgEl.textContent = text;
+    setTimeout(()=>{ msgEl.style.display="none"; }, 3800);
+  }
+
+  // ====== BOOK ======
+  function tryBook(){
+    if(!dateEl || !nameEl || !startEl || !endEl) return;
+
+    const date = dateEl.value;
+    const name = nameEl.value.trim();
+    const start = parseTime(startEl.value);
+    const end = parseTime(endEl.value);
+
+    if(!date) return showMsg("Elige un día.", "bad");
+    if(!name) return showMsg("Escribe el nombre de la reserva.", "bad");
+    if(end <= start) return showMsg("La hora fin debe ser mayor que la de inicio.", "bad");
+    if(end - start > MAX_DURATION) return showMsg("Máximo 2 horas por reserva.", "bad");
+    if(start < START_MIN || end > END_MIN) return showMsg("Horario permitido: 09:00–22:00.", "bad");
+
+    const all = loadAll();
+    const sameDayRoom = all.filter(r => r.room === SALA_ID && r.date === date);
+    const clash = sameDayRoom.some(r => overlaps(start, end, r.start, r.end));
+    if(clash) return showMsg("No se puede: se solapa con otra reserva.", "bad");
+
+    all.push({ id: makeId(), room: SALA_ID, date, start, end, name });
+    saveAll(all);
+
+    showMsg("Reserva guardada ✅", "ok");
+    renderAvailability();
+  }
+
+  // ====== CLEAR ======
+  function clearDay(){
+    if(!dateEl) return;
+    const date = dateEl.value;
+    const all = loadAll();
+    const filtered = all.filter(r => !(r.room === SALA_ID && r.date === date));
+    saveAll(filtered);
+    showMsg("Reservas de este día borradas.", "ok");
+    renderAvailability();
+  }
+
+  function clearAll(){
+    localStorage.removeItem(STORE_KEY);
+    showMsg("Borrado total realizado.", "ok");
+    renderAvailability();
+  }
+
+  // ====== START ======
+  fillStartTimes();
+  fillEndTimes();
+  renderAvailability();
+
+  // ====== EVENTS ======
+  if(startEl) startEl.addEventListener("change", ()=>{ fillEndTimes(); });
+  if(dateEl) dateEl.addEventListener("change", ()=>{ renderAvailability(); });
+  if(bookBtn) bookBtn.addEventListener("click", tryBook);
+
+  if(clearDayBtn) clearDayBtn.addEventListener("click", ()=>{
+    if(confirm("¿Borrar todas las reservas de este día en esta sala?")) clearDay();
+  });
+
+  if(clearAllBtn) clearAllBtn.addEventListener("click", ()=>{
+    if(confirm("⚠️ ¿Borrar TODAS las reservas de TODAS las salas en este dispositivo?")) clearAll();
+  });
+</script>
+</body>
+</html>

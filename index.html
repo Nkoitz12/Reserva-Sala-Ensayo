@@ -1,11 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Reservas Salas</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salas</title>
+  <style>
+    :root{
+      --bg1:#12002a;
+      --bg2:#2a0061;
+      --card:#1b0a3a;
+      --stroke: rgba(255,255,255,.16);
+      --shadow: rgba(0,0,0,.45);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,.75);
+      --radius: 22px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(110,0,255,.45), transparent 60%),
+        radial-gradient(900px 700px at 10% 120%, rgba(0,180,255,.25), transparent 55%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+    }
+
+    .wrap{
+      width:min(980px, 100%);
+    }
+
+    .title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
+    }
+
+    .title h1{
+      font-size: clamp(20px, 3vw, 28px);
+      margin:0;
+      letter-spacing:.2px;
+    }
+
+    .title p{
+      margin:0;
+      color:var(--muted);
+      font-size: 14px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap:16px;
+    }
+
+    @media (max-width: 700px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      text-decoration:none;
+      color:inherit;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: 0 18px 50px var(--shadow);
+      transform: translateY(0);
+      transition: transform .18s ease, border-color .18s ease;
+      display:block;
+    }
+
+    .card:hover{
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.28);
+    }
+
+    .thumb{
+      aspect-ratio: 16/10;
+      width:100%;
+      background:#000;
+      position:relative;
+    }
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      display:block;
+      filter: saturate(1.05) contrast(1.05);
+    }
+
+    .label{
+      padding:14px 16px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .label strong{
+      font-size: 20px;
+      letter-spacing:.2px;
+    }
+
+    .label span{
+      opacity:.85;
+      font-size: 18px;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>App de Reservas Salas 🎵</h1>
-  <p>Si ves esto, GitHub Pages funciona.</p>
+  <main class="wrap">
+    <div class="title">
+      <h1>Elige sala</h1>
+      <p>Untsalaz · Reservas</p>
+    </div>
+
+    <section class="grid">
+      <a class="card" href="./sala1/">
+        <div class="thumb"><img src="./assets/escenario.png" alt="Sala 1"></div>
+        <div class="label"><strong>Sala 1</strong><span>→</span></div>
+      </a>
+
+      <a class="card" href="./sala2/">
+        <div class="thumb"><img src="./assets/escenario.png" alt="Sala 2"></div>
+        <div class="label"><strong>Sala 2</strong><span>→</span></div>
+      </a>
+
+      <a class="card" href="./sala3/">
+        <div class="thumb"><img src="./assets/escenario.png" alt="Sala 3"></div>
+        <div class="label"><strong>Sala 3</strong><span>→</span></div>
+      </a>
+
+      <a class="card" href="./comedor/">
+        <div class="thumb"><img src="./assets/escenario.png" alt="Comedor"></div>
+        <div class="label"><strong>Comedor</strong><span>→</span></div>
+      </a>
+    </section>
+  </main>
 </body>
 </html>

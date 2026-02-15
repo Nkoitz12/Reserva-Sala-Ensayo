@@ -35,4 +35,407 @@
       border:1px solid var(--border);
       padding:10px 12px; border-radius:14px;
       background:rgba(255,255,255,.04);
-      display
+      display:inline-flex; align-items:center; gap:10px;
+    }
+    .back:hover{background:rgba(255,255,255,.07)}
+    .h{display:flex; flex-direction:column; gap:4px}
+    .h h1{margin:0; font-size:22px; letter-spacing:.2px}
+    .h p{margin:0; color:var(--muted); font-size:13px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap:14px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .card .head{
+      padding:14px 16px;
+      border-bottom:1px solid var(--border);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background:rgba(0,0,0,.15);
+    }
+    .card .head b{font-size:14px}
+    .card .body{padding:16px}
+    label{display:block; font-size:12px; color:var(--muted); margin:0 0 6px}
+    input, select, button{
+      width:100%;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      color:var(--text);
+      padding:12px 12px;
+      outline:none;
+      font-size:14px;
+    }
+    input::placeholder{color:rgba(234,240,255,.45)}
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+    @media (max-width:480px){ .row{grid-template-columns:1fr} }
+    .btn{
+      cursor:pointer;
+      border:none;
+      background: linear-gradient(135deg, rgba(124,92,255,.95), rgba(124,92,255,.65));
+      box-shadow: 0 12px 30px rgba(124,92,255,.22);
+      font-weight:700;
+      padding:12px 14px;
+    }
+    .btn:hover{filter:brightness(1.07)}
+    .btn:disabled{opacity:.55; cursor:not-allowed}
+    .msg{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.22);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .msg.ok{color:var(--ok); border-color:rgba(54,211,153,.35)}
+    .msg.bad{color:var(--bad); border-color:rgba(255,107,107,.35)}
+    .legend{
+      display:flex; gap:10px; flex-wrap:wrap;
+      color:var(--muted); font-size:12px;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:7px;
+      padding:6px 10px; border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.18);
+    }
+    .dot{width:10px; height:10px; border-radius:999px}
+    .dot.ok{background:var(--ok)}
+    .dot.bad{background:var(--bad)}
+    .schedule{
+      display:grid;
+      grid-template-columns: 90px 1fr 80px;
+      gap:10px;
+      align-items:center;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:rgba(0,0,0,.18);
+      margin-bottom:10px;
+    }
+    .schedule .t{font-weight:700}
+    .schedule .who{color:var(--muted); font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+    .status{
+      justify-self:end;
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(0,0,0,.20);
+    }
+    .status.ok{color:var(--ok); border-color:rgba(54,211,153,.35)}
+    .status.bad{color:var(--bad); border-color:rgba(255,107,107,.35)}
+    .small-actions{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap}
+    .ghost{
+      cursor:pointer;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      font-weight:600;
+      padding:10px 12px;
+      border-radius:14px;
+      color:var(--text);
+      width:auto;
+      flex:1;
+      min-width:190px;
+    }
+    .ghost:hover{background:rgba(255,255,255,.09)}
+    .danger{
+      background:rgba(255,107,107,.14);
+      border:1px solid rgba(255,107,107,.35);
+      color:#ffd7d7;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="back" href="./index.html" aria-label="Volver">← <span>Volver</span></a>
+      <div class="h">
+        <h1 id="title">Reservas · Sala 1</h1>
+        <p>Selecciona día y horas (máx. 2h). Se guarda en este dispositivo.</p>
+      </div>
+      <div style="width:94px"></div>
+    </div>
+
+    <div class="grid">
+      <!-- FORMULARIO -->
+      <section class="card">
+        <div class="head">
+          <b>Crear reserva</b>
+          <div class="legend">
+            <span class="pill"><span class="dot ok"></span>Libre</span>
+            <span class="pill"><span class="dot bad"></span>Ocupado</span>
+          </div>
+        </div>
+        <div class="body">
+          <div class="row">
+            <div>
+              <label for="date">Día</label>
+              <input id="date" type="date" />
+            </div>
+            <div>
+              <label for="name">Nombre</label>
+              <input id="name" type="text" placeholder="Ej: Eneko / Untsalaz..." maxlength="60" />
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="row">
+            <div>
+              <label for="start">Hora inicio</label>
+              <select id="start"></select>
+            </div>
+            <div>
+              <label for="end">Hora fin (máx. 2h)</label>
+              <select id="end"></select>
+            </div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <button class="btn" id="bookBtn" type="button">Reservar</button>
+          <div id="msg" class="msg" style="display:none"></div>
+
+          <div class="small-actions">
+            <button class="ghost" id="clearDayBtn" type="button">Borrar reservas de este día</button>
+            <button class="ghost danger" id="clearAllBtn" type="button">Borrar TODO</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- DISPONIBILIDAD -->
+      <section class="card">
+        <div class="head">
+          <b>Disponibilidad del día</b>
+          <span id="dayLabel" style="color:var(--muted); font-size:12px">—</span>
+        </div>
+        <div class="body" id="availability"></div>
+      </section>
+    </div>
+  </div>
+
+<script>
+  // ====== CONFIG ======
+  const SALA_ID = "Sala 1";               // <- CAMBIA ESTO EN sala2.html, sala3.html...
+  const STORE_KEY = "reservas_salas_v1";  // (no lo cambies)
+  const START_MIN = 9 * 60;              // 09:00
+  const END_MIN   = 22 * 60;             // 22:00
+  const STEP = 30;                       // 30 min
+  const MAX_DURATION = 120;              // 2 horas (120 min)
+
+  // ====== HELPERS ======
+  const pad = n => String(n).padStart(2, "0");
+  const toTime = mins => `${pad(Math.floor(mins/60))}:${pad(mins%60)}`;
+  const parseTime = str => {
+    const parts = String(str).split(":");
+    const h = Number(parts[0] || 0);
+    const m = Number(parts[1] || 0);
+    return h*60 + m;
+  };
+  const fmtDateES = (yyyy_mm_dd) => {
+    const parts = String(yyyy_mm_dd).split("-").map(Number);
+    const y = parts[0], m = parts[1], d = parts[2];
+    const dt = new Date(y, (m||1)-1, d||1);
+    return dt.toLocaleDateString("es-ES", { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+  };
+  const overlaps = (aStart, aEnd, bStart, bEnd) => (aStart < bEnd) && (aEnd > bStart);
+
+  function makeId(){
+    return "r_" + Date.now() + "_" + Math.random().toString(16).slice(2);
+  }
+
+  const loadAll = () => {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || "[]"); }
+    catch { return []; }
+  };
+  const saveAll = (arr) => localStorage.setItem(STORE_KEY, JSON.stringify(arr));
+
+  const getReservationsFor = (room, date) => {
+    return loadAll()
+      .filter(r => r.room === room && r.date === date)
+      .sort((x,y) => x.start - y.start);
+  };
+
+  // ====== UI REFERENCES ======
+  const titleEl = document.getElementById("title");
+  const dateEl = document.getElementById("date");
+  const nameEl = document.getElementById("name");
+  const startEl = document.getElementById("start");
+  const endEl = document.getElementById("end");
+  const msgEl = document.getElementById("msg");
+  const dayLabelEl = document.getElementById("dayLabel");
+  const availabilityEl = document.getElementById("availability");
+  const bookBtn = document.getElementById("bookBtn");
+  const clearDayBtn = document.getElementById("clearDayBtn");
+  const clearAllBtn = document.getElementById("clearAllBtn");
+
+  // ====== SAFE INIT ======
+  if (titleEl) titleEl.textContent = `Reservas · ${SALA_ID}`;
+  document.title = `Reservas - ${SALA_ID}`;
+
+  // ====== INIT DATE (HOY) ======
+  (function initDate(){
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = pad(today.getMonth()+1);
+    const d = pad(today.getDate());
+    if (dateEl) dateEl.value = `${y}-${m}-${d}`;
+    if (dateEl) dateEl.min = `${y}-01-01`;
+    if (dayLabelEl && dateEl) dayLabelEl.textContent = fmtDateES(dateEl.value);
+  })();
+
+  // ====== POPULATE TIMES ======
+  function fillStartTimes(){
+    if(!startEl) return;
+    startEl.innerHTML = "";
+    for(let t=START_MIN; t<=END_MIN-STEP; t+=STEP){
+      const opt = document.createElement("option");
+      opt.value = toTime(t);
+      opt.textContent = toTime(t);
+      startEl.appendChild(opt);
+    }
+    // default: first option
+    startEl.value = startEl.options[0]?.value || "";
+  }
+
+  function fillEndTimes(){
+    if(!endEl || !startEl) return;
+    endEl.innerHTML = "";
+    const sVal = startEl.value || toTime(START_MIN);
+    const s = parseTime(sVal);
+
+    const maxEnd = Math.min(s + MAX_DURATION, END_MIN);
+    for(let t = s + STEP; t <= maxEnd; t += STEP){
+      const opt = document.createElement("option");
+      opt.value = toTime(t);
+      opt.textContent = toTime(t);
+      endEl.appendChild(opt);
+    }
+
+    // default: +1h if possible
+    const oneHour = toTime(Math.min(s + 60, maxEnd));
+    const exists = [...endEl.options].some(o => o.value === oneHour);
+    endEl.value = exists ? oneHour : (endEl.options[endEl.options.length-1]?.value || "");
+  }
+
+  // ====== RENDER ======
+  function renderAvailability(){
+    if(!availabilityEl || !dateEl || !dayLabelEl) return;
+    const date = dateEl.value;
+    dayLabelEl.textContent = fmtDateES(date);
+
+    const reservas = getReservationsFor(SALA_ID, date);
+    availabilityEl.innerHTML = "";
+
+    for(let t=START_MIN; t<END_MIN; t+=STEP){
+      const slotStart = t;
+      const slotEnd = t + STEP;
+      const r = reservas.find(r => overlaps(slotStart, slotEnd, r.start, r.end));
+
+      const box = document.createElement("div");
+      box.className = "schedule";
+
+      const tEl = document.createElement("div");
+      tEl.className = "t";
+      tEl.textContent = `${toTime(slotStart)}–${toTime(slotEnd)}`;
+
+      const whoEl = document.createElement("div");
+      whoEl.className = "who";
+      whoEl.textContent = r ? `Reservado por: ${r.name} (${toTime(r.start)}–${toTime(r.end)})` : "Libre";
+
+      const st = document.createElement("div");
+      st.className = "status " + (r ? "bad" : "ok");
+      st.textContent = r ? "OCUPADO" : "LIBRE";
+
+      box.appendChild(tEl);
+      box.appendChild(whoEl);
+      box.appendChild(st);
+      availabilityEl.appendChild(box);
+    }
+  }
+
+  // ====== MSG ======
+  function showMsg(text, type){
+    if(!msgEl) return alert(text);
+    msgEl.style.display = "block";
+    msgEl.className = "msg " + (type || "");
+    msgEl.textContent = text;
+    setTimeout(()=>{ msgEl.style.display="none"; }, 3800);
+  }
+
+  // ====== BOOK ======
+  function tryBook(){
+    if(!dateEl || !nameEl || !startEl || !endEl) return;
+
+    const date = dateEl.value;
+    const name = nameEl.value.trim();
+    const start = parseTime(startEl.value);
+    const end = parseTime(endEl.value);
+
+    if(!date) return showMsg("Elige un día.", "bad");
+    if(!name) return showMsg("Escribe el nombre de la reserva.", "bad");
+    if(end <= start) return showMsg("La hora fin debe ser mayor que la de inicio.", "bad");
+    if(end - start > MAX_DURATION) return showMsg("Máximo 2 horas por reserva.", "bad");
+    if(start < START_MIN || end > END_MIN) return showMsg("Horario permitido: 09:00–22:00.", "bad");
+
+    const all = loadAll();
+    const sameDayRoom = all.filter(r => r.room === SALA_ID && r.date === date);
+
+    const clash = sameDayRoom.some(r => overlaps(start, end, r.start, r.end));
+    if(clash) return showMsg("No se puede: se solapa con otra reserva.", "bad");
+
+    all.push({ id: makeId(), room: SALA_ID, date, start, end, name });
+    saveAll(all);
+
+    showMsg("Reserva guardada ✅", "ok");
+    renderAvailability();
+  }
+
+  // ====== CLEAR ======
+  function clearDay(){
+    if(!dateEl) return;
+    const date = dateEl.value;
+    const all = loadAll();
+    const filtered = all.filter(r => !(r.room === SALA_ID && r.date === date));
+    saveAll(filtered);
+    showMsg("Reservas de este día borradas.", "ok");
+    renderAvailability();
+  }
+
+  function clearAll(){
+    localStorage.removeItem(STORE_KEY);
+    showMsg("Borrado total realizado.", "ok");
+    renderAvailability();
+  }
+
+  // ====== START ======
+  fillStartTimes();
+  fillEndTimes();
+  renderAvailability();
+
+  // ====== EVENTS ======
+  if(startEl) startEl.addEventListener("change", ()=>{ fillEndTimes(); });
+  if(dateEl) dateEl.addEventListener("change", ()=>{ renderAvailability(); });
+  if(bookBtn) bookBtn.addEventListener("click", tryBook);
+
+  if(clearDayBtn) clearDayBtn.addEventListener("click", ()=>{
+    if(confirm("¿Borrar todas las reservas de este día en esta sala?")) clearDay();
+  });
+
+  if(clearAllBtn) clearAllBtn.addEventListener("click", ()=>{
+    if(confirm("⚠️ ¿Borrar TODAS las reservas de TODAS las salas en este dispositivo?")) clearAll();
+  });
+</script>
+</body>
+</html>

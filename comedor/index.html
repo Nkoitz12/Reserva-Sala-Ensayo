@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sala 2</title>
+
+<style>
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(900px 600px at 50% -10%, rgba(110,0,255,.45), transparent 60%),
+              radial-gradient(900px 700px at 10% 120%, rgba(0,180,255,.25), transparent 55%),
+              linear-gradient(180deg, #2a0061, #12002a);
+  color:#fff;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.wrap{
+  width:min(1000px, 100%);
+  text-align:center;
+}
+
+a.back{
+  display:inline-block;
+  margin-bottom:14px;
+  color:#00ffcc;
+  text-decoration:none;
+  font-weight:600;
+}
+
+h1{
+  margin:6px 0 25px;
+}
+
+.instrumentos{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  flex-wrap:wrap;
+}
+
+.instrumento{
+  cursor:pointer;
+  user-select:none;
+}
+
+.instrumento img{
+  width:160px;
+  transition: 0.2s ease;
+  border-radius:15px;
+}
+
+.instrumento p{
+  margin-top:10px;
+  font-size:18px;
+  font-weight:600;
+}
+
+.instrumento.seleccionado img{
+  outline: 5px solid #00ff88;
+  box-shadow: 0 0 25px rgba(0,255,136,0.7);
+  transform: scale(1.05);
+}
+</style>
+
+</head>
+<body>
+
+<main class="wrap">
+  <a class="back" href="../">← Volver</a>
+  <h1>comedor</h1>
+
+  <div class="instrumentos">
+
+    <div class="instrumento gaita" onclick="toggleInstrument(this)">
+      <img src="../escenario.png" alt="Gaita 1">
+      <p>Gaita 1</p>
+    </div>
+
+    <div class="instrumento gaita" onclick="toggleInstrument(this)">
+      <img src="../escenario.png" alt="Gaita 2">
+      <p>Gaita 2</p>
+    </div>
+
+    <div class="instrumento tambor" onclick="toggleInstrument(this)">
+      <img src="../escenario.png" alt="Tambor">
+      <p>Tambor</p>
+    </div>
+
+  </div>
+</main>
+
+<script>
+function toggleInstrument(element
